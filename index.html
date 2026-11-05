@@ -15,8 +15,8 @@
 <p>Move the sliders to see how your original exam score and the credit you earn for corrections affect your revised exam grade. This is an estimate based on the course correction scale.</p>
 <section class="control">
   <div class="heading"><label for="score">Original exam score</label><output class="value" for="score" id="scoreValue">60%</output></div>
-  <input id="score" type="range" min="54" max="96" step="1" value="60" aria-describedby="scoreBounds">
-  <div class="endpoints" id="scoreBounds"><span>54%</span><span>96%</span></div>
+  <input id="score" type="range" min="0" max="100" step="1" value="60" aria-describedby="scoreBounds">
+  <div class="endpoints" id="scoreBounds"><span>0%</span><span>100%</span></div>
 </section>
 <section class="control">
   <div class="heading"><label for="completion">Correction credit earned</label><output class="value" for="completion" id="completionValue">100%</output></div>
@@ -31,7 +31,7 @@
 <button class="reset" id="reset" type="button">Reset sliders</button>
 <div class="note">
   <strong>How the maximum bonus is calculated</strong>
-  <div class="formula">Original score 54–69%: maximum bonus = 15 − 0.8 × (original score − 54)<br>Original score above 69–96%: maximum bonus = 3 − (2.8 ÷ 27) × (original score − 69)<br><br>Revised grade = original score + maximum bonus × (correction credit ÷ 100)</div>
+  <div class="formula">Original score 0–54%: maximum bonus = 15 points<br>Original score above 54–69%: maximum bonus = 15 − 0.8 × (original score − 54)<br>Original score above 69–96%: maximum bonus = 3 − (2.8 ÷ 27) × (original score − 69)<br>Original score above 96–100%: maximum bonus = 0.05 × (100 − original score)<br><br>Revised grade = original score + maximum bonus × (correction credit ÷ 100)</div>
   <p><strong>Important:</strong> A 54% original score can rise to at most 69% from written corrections under this scale. Any separate opportunity to reach 70% through a mastery assessment is not included in this calculator. Bonus points are earned based on the quality of completed corrections.</p>
 </div>
 </main>
@@ -43,7 +43,7 @@
   const completion=document.getElementById('completion');
   function update(){
     const s=Number(score.value), c=Number(completion.value);
-    const maxBonus=s<=69 ? 15-0.8*(s-54) : 3-(2.8/27)*(s-69);
+    const maxBonus=s<=54 ? 15 : s<=69 ? 15-0.8*(s-54) : s<=96 ? 3-(2.8/27)*(s-69) : 0.05*(100-s);
     const earned=maxBonus*c/100, revised=s+earned;
     document.getElementById('scoreValue').textContent=s+'%';
     document.getElementById('completionValue').textContent=c+'%';
